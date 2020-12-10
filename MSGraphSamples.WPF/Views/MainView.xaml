@@ -36,124 +36,126 @@
     Icon="/Assets/MSGraph.png"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+    <TabControl>
+        <TabItem Header="Read / Query">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <!--  Select  -->
-            <StackPanel
+                    <!--  Select  -->
+                    <StackPanel
                 Grid.Row="0"
                 Grid.Column="0"
                 Margin="6,0"
                 VerticalAlignment="Bottom">
-                <TextBlock FontWeight="Bold">
+                        <TextBlock FontWeight="Bold">
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#select-parameter">
                         $select
                     </Hyperlink>
-                </TextBlock>
-                <TextBox Text="{Binding Select, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.ToolTip>
-                        <TextBlock>
-                            <Run Foreground="Green">// List properties you want to select separated by a comma</Run>
                         </TextBlock>
-                    </TextBox.ToolTip>
-                </TextBox>
-            </StackPanel>
+                        <TextBox Text="{Binding Select, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.ToolTip>
+                                <TextBlock>
+                            <Run Foreground="Green">// List properties you want to select separated by a comma</Run>
+                                </TextBlock>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
 
-            <!--  Order By  -->
-            <StackPanel
+                    <!--  Order By  -->
+                    <StackPanel
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="6">
-                <TextBlock FontWeight="Bold">
+                        <TextBlock FontWeight="Bold">
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#orderby-parameter">
                         $orderBy
                     </Hyperlink>
-                </TextBlock>
-                <TextBox Text="{Binding OrderBy, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                    <TextBox.ToolTip>
-                        <TextBlock>
+                        </TextBlock>
+                        <TextBox Text="{Binding OrderBy, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                            <TextBox.ToolTip>
+                                <TextBlock>
                             <Run Foreground="Green">// Enabled only on few properties, see documentation for details</Run>
                             <LineBreak />
                             property [asc|desc]</TextBlock>
-                    </TextBox.ToolTip>
-                </TextBox>
-            </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
 
-            <!--  Filter  -->
-            <StackPanel
+                    <!--  Filter  -->
+                    <StackPanel
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="6,0"
                 VerticalAlignment="Bottom">
-                <TextBlock FontWeight="Bold">
+                        <TextBlock FontWeight="Bold">
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#filter-parameter">
                         $filter
                     </Hyperlink>
-                </TextBlock>
-                <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                    <TextBox.ToolTip>
-                        <TextBlock>
+                        </TextBlock>
+                        <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                            <TextBox.ToolTip>
+                                <TextBlock>
                             property eq 'filterValue'<LineBreak />
                             property ne 'filterValue'<LineBreak />
                             startsWith(property, 'filterValue')<LineBreak />
                             endsWith(property, 'filterValue')<Run Foreground="Green" Text=" // Enabled on Mail and UserPrincipalName" />
-                        </TextBlock>
-                    </TextBox.ToolTip>
-                </TextBox>
-            </StackPanel>
+                                </TextBlock>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
 
-            <!--  Search  -->
-            <StackPanel
+                    <!--  Search  -->
+                    <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="6">
-                <TextBlock FontWeight="Bold">
+                        <TextBlock FontWeight="Bold">
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#using-search-on-directory-object-collections">
                         $search
                     </Hyperlink>
-                </TextBlock>
+                        </TextBlock>
 
-                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                    <TextBox.ToolTip>
-                        <TextBlock>
+                        <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                            <TextBox.ToolTip>
+                                <TextBlock>
                             <Run Foreground="Green">// Enabled on displayName and Description</Run>
                             <LineBreak />
                             <Run Foreground="Green">// All the other properties will fallback to startsWith filter behavior</Run>
                             <LineBreak />
                             &quot;property1:value1&quot; [AND|OR] &quot;property2:value2&quot;</TextBlock>
-                    </TextBox.ToolTip>
-                </TextBox>
-            </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                    </StackPanel>
 
-            <!--  Entity List  -->
-            <StackPanel
+                    <!--  Entity List  -->
+                    <StackPanel
                 Grid.Row="0"
                 Grid.Column="2"
                 Margin="6,0">
-                <TextBlock FontWeight="Bold" Text="{Binding DirectoryObjects.AdditionalData[@odata.count], StringFormat=Entities ({0}), FallbackValue=Entities}" />
-                <ComboBox
+                        <TextBlock FontWeight="Bold" Text="{Binding DirectoryObjects.AdditionalData[@odata.count], StringFormat=Entities ({0}), FallbackValue=Entities}" />
+                        <ComboBox
                     Width="120"
                     ItemsSource="{Binding Entities}"
                     SelectedItem="{Binding SelectedEntity, Mode=TwoWay}"
                     ToolTip="Select Entity" />
-            </StackPanel>
+                    </StackPanel>
 
-            <Button
+                    <Button
                 Grid.Row="1"
                 Grid.Column="2"
                 Margin="6"
@@ -161,81 +163,88 @@
                 Command="{Binding LoadCommand}"
                 Content="Load"
                 IsDefault="True" />
-        </Grid>
+                </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBox
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
                 Margin="6"
                 Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"
                 GotFocus="TextBox_SelectAll"
                 IsReadOnly="True"
                 PreviewMouseDown="TextBox_PreviewMouseDown"
                 Text="{Binding LastUrl, Mode=OneWay}" />
-            <Button
+                    <Button
                 Grid.Column="1"
                 Width="120"
                 Margin="6"
                 Padding="6,0"
                 Command="{Binding GraphExplorerCommand}"
                 Content="Graph Explorer" />
-        </Grid>
-        <DataGrid
+                </Grid>
+                <DataGrid
             Name="ResultsDataGrid"
             Grid.Row="2"
             IsReadOnly="True"
             ItemsSource="{Binding DirectoryObjects}"
             SelectedItem="{Binding SelectedObject}"
             SelectionMode="Single">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding DrillDownCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="AutoGeneratingColumn">
-                    <i:InvokeCommandAction Command="{Binding AutoGeneratingColumn}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="Sorting">
-                    <i:InvokeCommandAction Command="{Binding SortCommand}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </DataGrid>
-        <StatusBar Grid.Row="3">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Margin="6,0">
-                <TextBlock Text="{Binding UserName, StringFormat=Hello {0}, TargetNullValue='Hello User'}" />
-            </StatusBarItem>
-            <Separator Grid.Column="1" Margin="0,0,6,0" />
-            <StatusBarItem Grid.Column="2">
-                <Button
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DrillDownCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="AutoGeneratingColumn">
+                            <i:InvokeCommandAction Command="{Binding AutoGeneratingColumn}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Sorting">
+                            <i:InvokeCommandAction Command="{Binding SortCommand}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DataGrid>
+                <StatusBar Grid.Row="3">
+                    <StatusBar.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </StatusBar.ItemsPanel>
+                    <StatusBarItem Margin="6,0">
+                        <TextBlock Text="{Binding UserName, StringFormat=Hello {0}, TargetNullValue='Hello User'}" />
+                    </StatusBarItem>
+                    <Separator Grid.Column="1" Margin="0,0,6,0" />
+                    <StatusBarItem Grid.Column="2">
+                        <Button
                     Margin="0,0,6,0"
                     Padding="6,0"
                     Command="{Binding LogoutCommand}"
                     Content="Logout" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch">
-                <ProgressBar
+                    </StatusBarItem>
+                    <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch">
+                        <ProgressBar
                     Height="12"
                     Margin="0,0,6,0"
                     IsIndeterminate="{Binding IsBusy}" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="4" Margin="0,0,6,0">
-                <TextBlock Text="{Binding ElapsedMs, StringFormat={}{0:N0} ms}" />
-            </StatusBarItem>
-        </StatusBar>
-    </Grid>
+                    </StatusBarItem>
+                    <StatusBarItem Grid.Column="4" Margin="0,0,6,0">
+                        <TextBlock Text="{Binding ElapsedMs, StringFormat={}{0:N0} ms}" />
+                    </StatusBarItem>
+                </StatusBar>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Write">
+            <Grid>
+               
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
