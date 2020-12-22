@@ -10,6 +10,7 @@ namespace MsGraph_Samples.Services
 {
     public interface IGraphDataService
     {
+        Task<User> GetMe();
         Task<IEnumerable<DirectoryObject>?> GetApplicationsAsync(string filter, string search, string select, string orderBy);
         Task<IEnumerable<DirectoryObject>?> GetDevicesAsync(string filter, string search, string select, string orderBy);
         Task<IEnumerable<DirectoryObject>?> GetGroupsAsync(string filter, string search, string select, string orderBy);
@@ -18,16 +19,17 @@ namespace MsGraph_Samples.Services
         Task<IEnumerable<DirectoryObject>?> GetTransitiveMembersAsUsersAsync(string id);
         Task<IEnumerable<DirectoryObject>?> GetAppOwnersAsUsersAsync(string id);
         Task<long> GetUsersRawCountAsync(string filter, string search);
+
         string? LastUrl { get; }
     }
 
     public class GraphDataService : IGraphDataService
     {
         // Required for Advanced Queries
-        private readonly QueryOption OdataCount = new QueryOption("$count", "true");
+        private readonly QueryOption OdataCount = new("$count", "true");
 
         // Required for Advanced Queries
-        private readonly HeaderOption EventualConsistency = new HeaderOption("ConsistencyLevel", "eventual");
+        private readonly HeaderOption EventualConsistency = new("ConsistencyLevel", "eventual");
 
         public string? LastUrl { get; private set; } = null;
 
@@ -62,6 +64,11 @@ namespace MsGraph_Samples.Services
                 var encodedValue = WebUtility.UrlEncode(value);
                 return new QueryOption($"${name}", encodedValue);
             }
+        }
+
+        public Task<User> GetMe()
+        {
+            return _graphClient.Me.Request().GetAsync();
         }
 
         public async Task<IEnumerable<DirectoryObject>?> GetDevicesAsync(string filter, string search, string select, string orderBy)

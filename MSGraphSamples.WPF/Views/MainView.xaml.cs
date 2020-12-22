@@ -20,7 +20,7 @@ namespace MsGraph_Samples.Views
             textBox.SelectAll();
         }
 
-        void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             var textBox = (TextBox)sender;
             if (!textBox.IsKeyboardFocusWithin)
@@ -28,6 +28,13 @@ namespace MsGraph_Samples.Views
                 textBox.Focus();
                 e.Handled = true;
             }
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Workaround to prevent IsDefault button to execute before TextBox Bindings
+            var button = (Button)sender;
+            button.Focus();
         }
     }
 }

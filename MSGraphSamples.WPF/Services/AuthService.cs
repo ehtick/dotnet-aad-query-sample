@@ -2,29 +2,29 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Graph;
+using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
-using MsGraph_Samples.Helpers;
+using Microsoft.Identity.Client.Extensions.Msal;
 
 namespace MsGraph_Samples.Services
 {
-    public interface IAuthService : IAuthenticationProvider
+    public interface IAuthService
     {
-        IAccount? Account { get; }
-        event Action? AuthenticationSuccessful;
         GraphServiceClient GetServiceClient();
         Task Logout();
     }
 
     public class AuthService : IAuthService
     {
-        public IAccount? Account { get; private set; }
-        public event Action? AuthenticationSuccessful;
+        private static readonly string LocalAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        private static readonly string ProjectName = Assembly.GetCallingAssembly().GetName().Name ?? "tokencache";
+        private static readonly string CacheDirectoryPath = Path.Combine(LocalAppData, ProjectName);
+        private const string CacheFileName = "msalcache.bin";
 
         /// <summary>
         /// The content of Tenant by the information about the accounts allowed to sign-in in your application:
@@ -40,81 +40,46 @@ namespace MsGraph_Samples.Services
 
         // Make sure the user you login with has "Directory.Read.All" permissions
         private readonly string[] _scopes = { "Directory.Read.All" };
+
         private readonly IPublicClientApplication _publicClientApp;
+        private MsalCacheHelper? _cacheHelper;
         private GraphServiceClient? _graphClient;
+        private InteractiveAuthenticationProvider AuthProvider => new(_publicClientApp, _scopes);
 
         public AuthService(string clientId)
         {
             _publicClientApp = PublicClientApplicationBuilder.Create(clientId)
                 .WithAuthority(CloudInstance, Tenant)
-                .WithDefaultRedirectUri() // MAKE SURE YOU SET http://localhost AS REDIRECT URI IN THE AZURE PORTAL
+                .WithDefaultRedirectUri()
                 .Build();
-            TokenCacheHelper.EnableSerialization(_publicClientApp.UserTokenCache);
+
+            var storageCreationProperties = new StorageCreationPropertiesBuilder(CacheFileName, CacheDirectoryPath, clientId).Build();
+
+            // Workaround for Async creation, waiting for https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet/issues/102
+            MsalCacheHelper.CreateAsync(storageCreationProperties).Await(CacheHelperCreated);
         }
 
-        public GraphServiceClient GetServiceClient()
+        public GraphServiceClient GetServiceClient() => _graphClient ??= new GraphServiceClient(AuthProvider);
+
+        private void CacheHelperCreated(MsalCacheHelper cacheHelper)
         {
-            var authProvider = new DelegateAuthenticationProvider(AuthenticateRequestAsync);
-            return _graphClient ??= new GraphServiceClient(authProvider);
+            _cacheHelper = cacheHelper;
+            _cacheHelper.RegisterCache(_publicClientApp.UserTokenCache);
         }
 
-        public async Task AuthenticateRequestAsync(HttpRequestMessage requestMessage)
+        private async Task<IAccount?> GetAccount()
         {
-            var accessToken = await AcquireTokenAsync();
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            if (accessToken != null)
-                AuthenticationSuccessful?.Invoke();
-        }
-
-        private async Task<string?> AcquireTokenAsync()
-        {
-            var accounts = await _publicClientApp
-                .GetAccountsAsync().ConfigureAwait(false);
-            Account = accounts.FirstOrDefault();
-            
-            AuthenticationResult authResult;
-            try
-            {
-                authResult = await _publicClientApp
-                    .AcquireTokenSilent(_scopes, Account)
-                    .ExecuteAsync().ConfigureAwait(false);
-            }
-            catch (MsalUiRequiredException ex)
-            {
-                // A MsalUiRequiredException happened on AcquireTokenSilentAsync.
-                // This indicates you need to call AcquireTokenAsync to acquire a token
-                Debug.WriteLine($"MsalUiRequiredException: {ex.Message}");
-                try
-                {
-                    authResult = await _publicClientApp
-                        .AcquireTokenInteractive(_scopes)
-                        .ExecuteAsync().ConfigureAwait(false);
-
-                    accounts = await _publicClientApp
-                        .GetAccountsAsync().ConfigureAwait(false);
-                    Account = accounts.FirstOrDefault();
-                }
-                catch (MsalException msalex)
-                {
-                    Debug.WriteLine($"Error Acquiring Token:{Environment.NewLine}{msalex}");
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error Acquiring Token Silently:{Environment.NewLine}{ex}");
-                return null;
-            }
-
-            return authResult?.AccessToken;
+            var accounts = await _publicClientApp.GetAccountsAsync();
+            return accounts.FirstOrDefault();
         }
 
         public async Task Logout()
         {
-            TokenCacheHelper.Clear();
             _graphClient = null;
-            await _publicClientApp.RemoveAsync(Account)
-                .ConfigureAwait(false);
+            _cacheHelper?.Clear();
+
+            var account = await GetAccount();
+            await _publicClientApp.RemoveAsync(account);
         }
     }
 }

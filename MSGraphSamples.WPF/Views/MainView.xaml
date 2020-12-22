@@ -66,10 +66,10 @@
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#select-parameter">
                         $select
                     </Hyperlink>
-                        </TextBlock>
-                        <TextBox Text="{Binding Select, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBox.ToolTip>
-                                <TextBlock>
+                </TextBlock>
+                <TextBox Text="{Binding Select, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                    <TextBox.ToolTip>
+                        <TextBlock>
                             <Run Foreground="Green">// List properties you want to select separated by a comma</Run>
                                 </TextBlock>
                             </TextBox.ToolTip>
@@ -85,10 +85,10 @@
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#orderby-parameter">
                         $orderBy
                     </Hyperlink>
-                        </TextBlock>
-                        <TextBox Text="{Binding OrderBy, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                            <TextBox.ToolTip>
-                                <TextBlock>
+                </TextBlock>
+                <TextBox Text="{Binding OrderBy, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                    <TextBox.ToolTip>
+                        <TextBlock>
                             <Run Foreground="Green">// Enabled only on few properties, see documentation for details</Run>
                             <LineBreak />
                             property [asc|desc]</TextBlock>
@@ -106,10 +106,10 @@
                     <Hyperlink helper:HyperlinkExtensions.IsWeb="true" NavigateUri="https://docs.microsoft.com/en-us/graph/query-parameters?context=graph%2Fapi%2F1.0#filter-parameter">
                         $filter
                     </Hyperlink>
-                        </TextBlock>
-                        <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                            <TextBox.ToolTip>
-                                <TextBlock>
+                </TextBlock>
+                <TextBox Text="{Binding Filter, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                    <TextBox.ToolTip>
+                        <TextBlock>
                             property eq 'filterValue'<LineBreak />
                             property ne 'filterValue'<LineBreak />
                             startsWith(property, 'filterValue')<LineBreak />
@@ -130,9 +130,9 @@
                     </Hyperlink>
                         </TextBlock>
 
-                        <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
-                            <TextBox.ToolTip>
-                                <TextBlock>
+                <TextBox Text="{Binding Search, Mode=TwoWay}" ToolTipService.ShowDuration="10000">
+                    <TextBox.ToolTip>
+                        <TextBlock>
                             <Run Foreground="Green">// Enabled on displayName and Description</Run>
                             <LineBreak />
                             <Run Foreground="Green">// All the other properties will fallback to startsWith filter behavior</Run>
@@ -160,6 +160,7 @@
                 Grid.Column="2"
                 Margin="6"
                 Padding="6,0"
+                Click="LoadButton_Click"
                 Command="{Binding LoadCommand}"
                 Content="Load"
                 IsDefault="True" />
