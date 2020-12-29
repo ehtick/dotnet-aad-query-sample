@@ -9,7 +9,7 @@ namespace MsGraph_Samples.Services
     public class FakeGraphDataService : IGraphDataService
     {
         public string? LastUrl => "https://graph.microsoft.com/beta/users?$count=true";
-        private static IList<DirectoryObject> Users => new[]
+        private static IList<User> Users => new[]
         {
             new User { Id = "1", DisplayName = "Luca Spolidoro", Mail = "a@b.c" },
             new User { Id = "2", DisplayName = "Pino Quercia", Mail = "pino@quercia.com" },
@@ -22,44 +22,44 @@ namespace MsGraph_Samples.Services
         }
 
 
-        public Task<IEnumerable<DirectoryObject>?> GetApplicationsAsync(string filter, string search, string select, string orderBy)
+        public IAsyncEnumerable<Application> GetApplicationsAsync(string filter, string search, string select, string orderBy)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<Application>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetDevicesAsync(string filter, string search, string select, string orderBy)
+        public IAsyncEnumerable<Device> GetDevicesAsync(string filter, string search, string select, string orderBy)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<Device>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetGroupsAsync(string filter, string search, string select, string orderBy)
+        public IAsyncEnumerable<Group> GetGroupsAsync(string filter, string search, string select, string orderBy)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<Group>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetAppOwnersAsUsersAsync(string id)
+        public IAsyncEnumerable<User> GetAppOwnersAsUsersAsync(string id)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<User>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetTransitiveMemberOfAsGroupsAsync(string id)
+        public IAsyncEnumerable<Group> GetTransitiveMemberOfAsGroupsAsync(string id)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<Group>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetTransitiveMembersAsUsersAsync(string id)
+        public IAsyncEnumerable<User> GetTransitiveMembersAsUsersAsync(string id)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(null);
+            return AsyncEnumerable.Empty<User>();
         }
 
-        public Task<IEnumerable<DirectoryObject>?> GetUsersAsync(string filter, string search, string select, string orderBy)
+        public IAsyncEnumerable<User> GetUsersAsync(string filter, string search, string select, string orderBy)
         {
-            return Task.FromResult<IEnumerable<DirectoryObject>?>(Users);
+            return AsyncEnumerable.Empty<User>();
         }
 
-        public Task<long> GetUsersRawCountAsync(string filter, string search)
+        public Task<int> GetUsersRawCountAsync(string filter, string search)
         {
-            return Task.FromResult(Users.LongCount());
+            return Task.FromResult(Users.Count);
         }
     }
 }

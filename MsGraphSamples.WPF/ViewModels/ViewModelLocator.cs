@@ -33,11 +33,10 @@ namespace MsGraph_Samples.ViewModels
             }
             else
             {
-                var authService = new AuthService(SecretConfig.ClientId);
-                serviceCollection.AddSingleton<IAuthService>(authService);
-
-                var graphDataService = new GraphDataService(authService.GetServiceClient());
-                serviceCollection.AddSingleton<IGraphDataService>(graphDataService);
+                IAuthService authService = new AuthService(SecretConfig.ClientId);
+                serviceCollection.AddSingleton(authService);
+                serviceCollection.AddSingleton(authService.GetServiceClient());
+                serviceCollection.AddSingleton<IGraphDataService, GraphDataService>();
             }
 
             serviceCollection.AddSingleton<MainViewModel>();
