@@ -6,11 +6,16 @@ namespace MsGraph_Samples.Helpers
 {
     public static class IAsyncEnumerableGraphExtensions
     {
+        /// <summary>
+        /// Transform an ApplicationsCollection Request into an AsyncEnumerable to efficiently iterate through the collection in case there are several pages.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public static async IAsyncEnumerable<Application> ToAsyncEnumerable(this IGraphServiceApplicationsCollectionRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-
+            
             do
             {
                 var page = await request.GetAsync().ConfigureAwait(false);

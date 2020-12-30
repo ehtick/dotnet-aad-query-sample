@@ -21,39 +21,39 @@ namespace MsGraph_Samples.Services
             return Task.FromResult(Users[0]);
         }
 
-        public IAsyncEnumerable<Application> GetApplicationsAsync(string filter, string search, string select, string orderBy)
+        public Task<IGraphServiceApplicationsCollectionPage> GetApplicationsAsync(string filter, string search, string select, string orderBy)
         {
-            return AsyncEnumerable.Empty<Application>();
+            return Task.FromResult((IGraphServiceApplicationsCollectionPage)new GraphServiceApplicationsCollectionPage());
         }
 
-        public IAsyncEnumerable<Device> GetDevicesAsync(string filter, string search, string select, string orderBy)
+        public Task<IGraphServiceDevicesCollectionPage> GetDevicesAsync(string filter, string search, string select, string orderBy)
         {
-            return AsyncEnumerable.Empty<Device>();
+            return Task.FromResult((IGraphServiceDevicesCollectionPage)new GraphServiceDevicesCollectionPage());
         }
 
-        public IAsyncEnumerable<Group> GetGroupsAsync(string filter, string search, string select, string orderBy)
+        public Task<IGraphServiceGroupsCollectionPage> GetGroupsAsync(string filter, string search, string select, string orderBy)
         {
-            return AsyncEnumerable.Empty<Group>();
+            return Task.FromResult((IGraphServiceGroupsCollectionPage)new GraphServiceGroupsCollectionPage());
         }
 
-        public IAsyncEnumerable<User> GetAppOwnersAsUsersAsync(string id)
+        public Task<IGraphServiceUsersCollectionPage> GetAppOwnersAsUsersAsync(string id)
         {
-            return AsyncEnumerable.Empty<User>();
+            return Task.FromResult((IGraphServiceUsersCollectionPage)new GraphServiceUsersCollectionPage());
         }
 
-        public IAsyncEnumerable<Group> GetTransitiveMemberOfAsGroupsAsync(string id)
+        public Task<IGraphServiceGroupsCollectionPage> GetTransitiveMemberOfAsGroupsAsync(string id)
         {
-            return AsyncEnumerable.Empty<Group>();
+            return Task.FromResult((IGraphServiceGroupsCollectionPage)new GraphServiceGroupsCollectionPage());
         }
 
-        public IAsyncEnumerable<User> GetTransitiveMembersAsUsersAsync(string id)
+        public Task<IGraphServiceUsersCollectionPage> GetTransitiveMembersAsUsersAsync(string id)
         {
-            return AsyncEnumerable.Empty<User>();
+            return Task.FromResult((IGraphServiceUsersCollectionPage)new GraphServiceUsersCollectionPage());
         }
 
-        public IAsyncEnumerable<User> GetUsersAsync(string filter, string search, string select, string orderBy)
+        public Task<IGraphServiceUsersCollectionPage> GetUsersAsync(string filter, string search, string select, string orderBy)
         {
-            return AsyncEnumerable.Empty<User>();
+            return Task.FromResult((IGraphServiceUsersCollectionPage)new GraphServiceUsersCollectionPage());
         }
 
         public Task<int> GetUsersRawCountAsync(string filter, string search)

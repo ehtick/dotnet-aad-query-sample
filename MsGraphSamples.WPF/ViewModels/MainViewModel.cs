@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -57,15 +56,27 @@ namespace MsGraph_Samples.ViewModels
 
         public long ElapsedMs => _stopWatch.ElapsedMilliseconds;
 
-        public ObservableCollection<DirectoryObject> DirectoryObjects { get; } = new();
+        private IEnumerable<DirectoryObject>? _directoryObjects;
+        public IEnumerable<DirectoryObject>? DirectoryObjects
+        {
+            get => _directoryObjects;
+            private set => Set(ref _directoryObjects, value);
+        }
 
         #region OData Operators
 
-        private string _select = "id, displayName, mail, userPrincipalName";
+        private const string SelectDefaultValue = "id, displayName, mail, userPrincipalName";
+        public string[] SplittedSelect { get; private set; } = SelectDefaultValue.Split(',', StringSplitOptions.TrimEntries);
+
+        private string _select = SelectDefaultValue;
         public string Select
         {
             get => _select;
-            set => Set(ref _select, value);
+            set
+            {
+                if (Set(ref _select, value))
+                    SplittedSelect = Select.Split(',', StringSplitOptions.TrimEntries);
+            }
         }
 
         private string _filter = string.Empty;
@@ -119,28 +130,35 @@ namespace MsGraph_Samples.ViewModels
             IsBusy = true;
             _stopWatch.Restart();
 
-            DirectoryObjects.Clear();
-
             try
             {
                 switch (SelectedEntity)
                 {
                     case "Users":
-                        await foreach (var user in _graphService.GetUsersAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(user);
+                        var users = await _graphService.GetUsersAsync(Filter, Search, Select, OrderBy);
+                        DirectoryObjects = users;
+                        while (users.NextPageRequest != null)
+                        {
+                            users = await users.NextPageRequest.GetAsync();
+                           // DirectoryObjects = DirectoryObjects.Concat(users);
+                        }
+
+                        //DirectoryObjects = await _graphService
+                        //    .GetUsersAsync(Filter, Search, Select, OrderBy)
+                        //    .ToListAsync();
                         break;
-                    case "Groups":
-                        await foreach (var group in _graphService.GetGroupsAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(group);
-                        break;
-                    case "Applications":
-                        await foreach (var application in _graphService.GetApplicationsAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(application);
-                        break;
-                    case "Devices":
-                        await foreach (var device in _graphService.GetDevicesAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(device);
-                        break;
+                    //case "Groups":
+                    //    await foreach (var group in _graphService.GetGroupsAsync(Filter, Search, Select, OrderBy))
+                    //        DirectoryObjects.Add(group);
+                    //    break;
+                    //case "Applications":
+                    //    await foreach (var application in _graphService.GetApplicationsAsync(Filter, Search, Select, OrderBy))
+                    //        DirectoryObjects.Add(application);
+                    //    break;
+                    //case "Devices":
+                    //    await foreach (var device in _graphService.GetDevicesAsync(Filter, Search, Select, OrderBy))
+                    //        DirectoryObjects.Add(device);
+                    //    break;
                     default:
                         throw new NotImplementedException("Can't find selected entity");
                 }
@@ -194,32 +212,31 @@ namespace MsGraph_Samples.ViewModels
 
             Filter = string.Empty;
             Search = string.Empty;
-            DirectoryObjects.Clear();
 
             try
             {
                 switch (SelectedEntity)
                 {
-                    case "Users":
-                        await foreach (var group in _graphService.GetTransitiveMemberOfAsGroupsAsync(SelectedObject.Id))
-                            DirectoryObjects.Add(group);
-                        SelectedEntity = "Groups";
-                        break;
-                    case "Groups":
-                        await foreach (var user in _graphService.GetTransitiveMembersAsUsersAsync(SelectedObject.Id))
-                            DirectoryObjects.Add(user);
-                        SelectedEntity = "Users";
-                        break;
-                    case "Applications":
-                        await foreach (var user in _graphService.GetAppOwnersAsUsersAsync(SelectedObject.Id))
-                            DirectoryObjects.Add(user);
-                        SelectedEntity = "Users";
-                        break;
-                    case "Devices":
-                        await foreach (var group in _graphService.GetTransitiveMemberOfAsGroupsAsync(SelectedObject.Id))
-                            DirectoryObjects.Add(group);
-                        SelectedEntity = "Groups";
-                        break;
+                    //case "Users":
+                    //    await foreach (var group in _graphService.GetTransitiveMemberOfAsGroupsAsync(SelectedObject.Id))
+                    //        DirectoryObjects.Add(group);
+                    //    SelectedEntity = "Groups";
+                    //    break;
+                    //case "Groups":
+                    //    await foreach (var user in _graphService.GetTransitiveMembersAsUsersAsync(SelectedObject.Id))
+                    //        DirectoryObjects.Add(user);
+                    //    SelectedEntity = "Users";
+                    //    break;
+                    //case "Applications":
+                    //    await foreach (var user in _graphService.GetAppOwnersAsUsersAsync(SelectedObject.Id))
+                    //        DirectoryObjects.Add(user);
+                    //    SelectedEntity = "Users";
+                    //    break;
+                    //case "Devices":
+                    //    await foreach (var group in _graphService.GetTransitiveMemberOfAsGroupsAsync(SelectedObject.Id))
+                    //        DirectoryObjects.Add(group);
+                    //    SelectedEntity = "Groups";
+                    //    break;
                     default:
                         break;
                 }
@@ -235,16 +252,6 @@ namespace MsGraph_Samples.ViewModels
                 RaisePropertyChanged(nameof(LastUrl));
                 AsyncRelayCommand.RaiseCanExecuteChanged();
                 IsBusy = false;
-            }
-        }
-
-        public RelayCommand<DataGridAutoGeneratingColumnEventArgs> AutoGeneratingColumn => new(AutoGeneratingColumnAction);
-        private void AutoGeneratingColumnAction(DataGridAutoGeneratingColumnEventArgs e)
-        {
-            if (!Select.IsNullOrEmpty())
-            {
-                e.Cancel = !e.PropertyName.In(Select.Split(','));
-                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             }
         }
 
