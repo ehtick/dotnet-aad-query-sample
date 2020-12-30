@@ -36,7 +36,7 @@ namespace MsGraph_Samples.Services
 
         private readonly IGraphServiceClient _graphClient;
 
-        public GraphDataService(IGraphServiceClient graphClient) 
+        public GraphDataService(IGraphServiceClient graphClient)
         {
             _graphClient = graphClient;
         }
@@ -79,7 +79,6 @@ namespace MsGraph_Samples.Services
 
             return request.ToAsyncEnumerable();
         }
-
 
         public IAsyncEnumerable<Device> GetDevicesAsync(string filter, string search, string select, string orderBy)
         {

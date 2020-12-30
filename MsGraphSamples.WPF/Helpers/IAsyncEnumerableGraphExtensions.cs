@@ -14,7 +14,6 @@ namespace MsGraph_Samples.Helpers
             do
             {
                 var page = await request.GetAsync().ConfigureAwait(false);
-
                 foreach (var item in page)
                     yield return item;
 
@@ -30,7 +29,6 @@ namespace MsGraph_Samples.Helpers
             do
             {
                 var page = await request.GetAsync().ConfigureAwait(false);
-
                 foreach (var item in page)
                     yield return item;
 
@@ -46,7 +44,6 @@ namespace MsGraph_Samples.Helpers
             do
             {
                 var page = await request.GetAsync().ConfigureAwait(false);
-
                 foreach (var item in page)
                     yield return item;
 
@@ -62,7 +59,6 @@ namespace MsGraph_Samples.Helpers
             do
             {
                 var page = await request.GetAsync().ConfigureAwait(false);
-
                 foreach (var item in page)
                     yield return item;
 

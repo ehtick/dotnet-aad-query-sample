@@ -18,9 +18,8 @@ namespace MsGraph_Samples.Services
 
         public Task<User> GetMe()
         {
-            return Task.FromResult((User)Users[0]);
+            return Task.FromResult(Users[0]);
         }
-
 
         public IAsyncEnumerable<Application> GetApplicationsAsync(string filter, string search, string select, string orderBy)
         {

@@ -130,16 +130,16 @@ namespace MsGraph_Samples.ViewModels
                             DirectoryObjects.Add(user);
                         break;
                     case "Groups":
-                        await foreach (var user in _graphService.GetGroupsAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(user);
+                        await foreach (var group in _graphService.GetGroupsAsync(Filter, Search, Select, OrderBy))
+                            DirectoryObjects.Add(group);
                         break;
                     case "Applications":
-                        await foreach (var user in _graphService.GetApplicationsAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(user);
+                        await foreach (var application in _graphService.GetApplicationsAsync(Filter, Search, Select, OrderBy))
+                            DirectoryObjects.Add(application);
                         break;
                     case "Devices":
-                        await foreach (var user in _graphService.GetDevicesAsync(Filter, Search, Select, OrderBy))
-                            DirectoryObjects.Add(user);
+                        await foreach (var device in _graphService.GetDevicesAsync(Filter, Search, Select, OrderBy))
+                            DirectoryObjects.Add(device);
                         break;
                     default:
                         throw new NotImplementedException("Can't find selected entity");
